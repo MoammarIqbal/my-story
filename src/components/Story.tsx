@@ -57,108 +57,140 @@ const Story: React.FC = () => {
     setIsFinished(true);
   };
 
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const handleCharTyped = () => {
+    const el = scrollContainerRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
+  };
+
+  // Ensure we scroll down one last time when the art credit appears
+  React.useEffect(() => {
+    if (isFinished) {
+      // Use setTimeout to ensure Framer Motion has mounted the element in the DOM
+      const timer = setTimeout(() => {
+        handleCharTyped();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isFinished]);
+
   return (
     <MotionConfig reducedMotion="user">
-      <div className="flex flex-col lg:flex-row min-h-screen text-[#252321] font-sans selection:bg-[#ECE6DA] selection:text-[#252321]">
-        {/* Image Section */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16 h-[50vh] lg:h-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen lg:h-screen lg:overflow-hidden text-[#252321] font-sans selection:bg-[#ECE6DA] selection:text-[#252321] py-12 lg:py-0 px-6 relative">
+        
+        {/* Responsive Container: 1-col on mobile/tablet, 2-col on desktop */}
+        <div className="w-full max-w-2xl lg:max-w-6xl flex flex-col lg:flex-row items-center lg:items-center justify-center gap-12 lg:gap-16 lg:h-full lg:py-16">
+          
+          {/* Image Section - Scales to image, sticky on desktop */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full max-w-md aspect-square lg:max-w-lg lg:aspect-auto lg:h-[80vh]"
+            className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:h-full"
           >
-            <img 
+            {/* The floating animation is handled via Framer Motion to avoid CSS transform conflicts */}
+            <motion.img 
+              animate={{ y: [0, -6, 0] }}
+              transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
               src="/ammar-by-maisara.jpeg" 
               alt="Drawing by Maisaraa" 
-              className="w-full h-full object-contain rounded-sm shadow-sm floating-image"
+              className="w-full h-auto max-w-md lg:max-w-none lg:max-h-full object-contain rounded-sm"
             />
           </motion.div>
-        </div>
 
-        {/* Content Section */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 py-12 lg:px-20 h-auto min-h-[50vh] lg:h-screen relative">
-          <AnimatePresence mode="wait">
-            {!storyStarted ? (
-              <motion.div
-                key="start-button"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.6 }}
-                className="flex items-center justify-center h-full"
-              >
-                <button
-                  onClick={handleStart}
-                  className="group flex items-center gap-3 text-[#77716A] hover:text-[#252321] transition-colors duration-300 px-6 py-3"
-                >
-                  <span className="text-sm tracking-widest lowercase">read a story</span>
-                  <Play className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
-                </button>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="story-content"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="flex flex-col h-full justify-center max-w-xl mx-auto lg:mx-0 w-full"
-              >
-                <div className="flex-1 flex flex-col overflow-y-auto pr-4 py-8">
-                  <div className="my-auto text-base md:text-lg leading-relaxed text-[#252321] tracking-wide font-serif">
-                    <Typewriter 
-                      key={key}
-                      text={STORY_TEXT} 
-                      onComplete={handleComplete}
-                      speed={30}
-                      skip={skip}
-                    />
-                    
-                    <AnimatePresence>
-                      {isFinished && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 1, delay: 0.5 }}
-                          className="mt-12 text-[#77716A] italic text-sm"
-                        >
-                          - art by maisaraa
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
-
-                {/* Controls */}
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 1 }}
-                  className="pt-6 pb-2 flex items-center gap-6 text-[#77716A] border-t border-[#ECE6DA]"
+          {/* Content Section */}
+          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start min-h-[40vh] lg:h-full relative overflow-hidden">
+            <AnimatePresence mode="wait">
+              {!storyStarted ? (
+                <motion.div
+                  key="start-button"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.6 }}
+                  className="flex items-center justify-center lg:justify-start mt-8 lg:mt-0 lg:h-full w-full"
                 >
                   <button
-                    onClick={handleRestart}
-                    className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-[#252321] transition-colors"
-                    aria-label="Restart story"
+                    onClick={handleStart}
+                    className="group flex items-center gap-3 text-[#77716A] hover:text-[#252321] transition-colors duration-300 px-6 py-3 border border-transparent hover:border-[#ECE6DA] rounded-full"
                   >
-                    <RotateCcw className="w-3 h-3" />
-                    restart
+                    <span className="text-sm tracking-widest lowercase">read a story</span>
+                    <Play className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
                   </button>
-                  
-                  {!isFinished && (
-                    <button
-                      onClick={handleSkip}
-                      className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-[#252321] transition-colors"
-                      aria-label="Skip typing"
-                    >
-                      <SkipForward className="w-3 h-3" />
-                      skip
-                    </button>
-                  )}
                 </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              ) : (
+                <motion.div
+                  key="story-content"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="w-full flex flex-col items-center lg:items-start h-full max-h-full"
+                >
+                  {/* Story Text Scroll Container */}
+                  <div 
+                    ref={scrollContainerRef}
+                    className="w-full flex-1 overflow-y-auto pr-4 pb-12 flex flex-col"
+                  >
+                    <div className="w-full text-base md:text-lg leading-relaxed text-[#252321] tracking-wide font-serif max-w-xl text-center lg:text-left my-auto lg:mt-auto lg:mb-0">
+                      <Typewriter 
+                        key={key}
+                        text={STORY_TEXT} 
+                        onComplete={handleComplete}
+                        onCharTyped={handleCharTyped}
+                        speed={35}
+                        skip={skip}
+                      />
+                      
+                      <AnimatePresence>
+                        {isFinished && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1, delay: 0.5 }}
+                            className="mt-16 mb-8 text-[#77716A] italic text-sm"
+                          >
+                            - art by maisaraa
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+
+                  {/* Controls */}
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 1 }}
+                    className="mt-4 pt-6 pb-2 w-full max-w-xs flex items-center justify-center lg:justify-start gap-8 text-[#77716A] border-t border-[#ECE6DA] shrink-0"
+                  >
+                    <button
+                      onClick={handleRestart}
+                      className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-[#252321] transition-colors"
+                      aria-label="Restart story"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      restart
+                    </button>
+                    
+                    {!isFinished && (
+                      <button
+                        onClick={handleSkip}
+                        className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-[#252321] transition-colors"
+                        aria-label="Skip typing"
+                      >
+                        <SkipForward className="w-3 h-3" />
+                        skip
+                      </button>
+                    )}
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
         </div>
       </div>
     </MotionConfig>

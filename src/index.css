@@ -38,14 +38,7 @@ body {
   animation: typewriterCursor 0.8s infinite;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-4px); }
-}
 
-.floating-image {
-  animation: float 10s ease-in-out infinite;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .typewriter-cursor, .floating-image {

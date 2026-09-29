@@ -5,22 +5,14 @@ export interface TypewriterProps {
   text: string;
   /** Optional callback fired when typing is finished or skipped. */
   onComplete?: () => void;
+  /** Optional callback fired every time a new character is displayed. */
+  onCharTyped?: () => void;
   /** Speed in milliseconds per standard character (default 35). */
   speed?: number;
   /** If true, immediately reveals all text and skips the animation. */
   skip?: boolean;
   /** Optional CSS class name for the wrapper element. */
   className?: string;
-}
-
-/**
- * Checks whether the user's browser/system prefers reduced motion.
- */
-function checkPrefersReducedMotion(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-    return false;
-  }
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 /**
@@ -43,27 +35,22 @@ function getCharacterDelay(prevChar: string, baseSpeed: number): number {
 export const Typewriter: React.FC<TypewriterProps> = ({
   text,
   onComplete,
-  speed = 35,
+  onCharTyped,
+  speed = 40,
   skip = false,
   className = '',
 }) => {
-  // Capture reduced-motion preference on mount
-  const isReducedMotion = useRef<boolean>(false);
-  const mountedRef = useRef<boolean>(false);
-
-  if (!mountedRef.current) {
-    isReducedMotion.current = checkPrefersReducedMotion();
-    mountedRef.current = true;
-  }
-
-  // Ref to onComplete callback so prop changes don't re-trigger timers
+  // Ref to callbacks so prop changes don't re-trigger timers
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
+  
+  const onCharTypedRef = useRef(onCharTyped);
+  onCharTypedRef.current = onCharTyped;
 
   const hasCompletedRef = useRef<boolean>(false);
 
   // Determine whether typing animation should be bypassed
-  const shouldBypass = skip || isReducedMotion.current;
+  const shouldBypass = skip;
 
   // Track the number of displayed characters
   const [displayedIndex, setDisplayedIndex] = useState<number>(() => {
@@ -84,6 +71,13 @@ export const Typewriter: React.FC<TypewriterProps> = ({
       setDisplayedIndex(text.length);
     }
   }, [skip, text.length]);
+
+  // Trigger onCharTyped when displayedIndex changes
+  useEffect(() => {
+    if (displayedIndex > 0 && displayedIndex < text.length) {
+      onCharTypedRef.current?.();
+    }
+  }, [displayedIndex, text.length]);
 
   // Derived completion state
   const isComplete = shouldBypass || displayedIndex >= text.length;
@@ -120,7 +114,7 @@ export const Typewriter: React.FC<TypewriterProps> = ({
       {!isComplete && (
         <span
           aria-hidden="true"
-          className="typewriter-cursor inline-block font-normal ml-0.5 select-none"
+          className="typewriter-cursor inline-block font-normal ml-0.5 select-none opacity-70"
         >
           |
         </span>
