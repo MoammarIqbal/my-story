@@ -59,19 +59,19 @@ const Story: React.FC = () => {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="flex flex-col lg:flex-row min-h-screen bg-[#F5F1E8] text-[#252321] font-sans selection:bg-[#ECE6DA] selection:text-[#252321]">
+      <div className="flex flex-col lg:flex-row min-h-screen text-[#252321] font-sans selection:bg-[#ECE6DA] selection:text-[#252321]">
         {/* Image Section */}
         <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16 h-[50vh] lg:h-screen">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full max-w-md aspect-square lg:max-w-lg lg:aspect-auto lg:h-[80vh] floating-image"
+            className="relative w-full max-w-md aspect-square lg:max-w-lg lg:aspect-auto lg:h-[80vh]"
           >
             <img 
               src="/ammar-by-maisara.jpeg" 
               alt="Drawing by Maisaraa" 
-              className="w-full h-full object-contain rounded-sm shadow-sm"
+              className="w-full h-full object-contain rounded-sm shadow-sm floating-image"
             />
           </motion.div>
         </div>

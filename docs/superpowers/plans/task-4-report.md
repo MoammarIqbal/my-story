@@ -13,3 +13,8 @@
 
 ## Concerns
 - None.
+
+## Task 4 Fixes
+- Removed `bg-[#F5F1E8]` from the root element of `Story.tsx` to stop obscuring the SVG noise texture in `index.css`.
+- Moved `.floating-image` class from the `motion.div` wrapper to the inner `<img>` element in `Story.tsx` to resolve the CSS transform collision with Framer Motion `scale` animation.
+- Verified fixes by running `npm run lint` and `npm run build` successfully.
