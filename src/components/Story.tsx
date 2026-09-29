@@ -97,7 +97,7 @@ const Story: React.FC = () => {
               transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
               src="/ammar-by-maisara.jpeg" 
               alt="Drawing by Maisaraa" 
-              className="w-full h-auto max-w-md lg:max-w-none lg:max-h-full object-contain rounded-sm"
+              className="w-full h-auto max-h-[55vh] max-w-md lg:max-w-none lg:max-h-full object-contain rounded-sm"
             />
           </motion.div>
 
