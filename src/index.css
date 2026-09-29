@@ -5,6 +5,8 @@
   --color-ivory-secondary: #ECE6DA;
   --color-paper-text: #252321;
   --color-paper-muted: #77716A;
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Lora', serif;
 }
 
 :root {
@@ -28,21 +30,28 @@ body {
 }
 
 @keyframes typewriterCursor {
-  0%, 49% {
-    opacity: 1;
-  }
-  50%, 100% {
-    opacity: 0;
-  }
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 .typewriter-cursor {
   animation: typewriterCursor 0.8s infinite;
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+.floating-image {
+  animation: float 10s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .typewriter-cursor {
+  .typewriter-cursor, .floating-image {
     animation: none;
+  }
+  .typewriter-cursor {
     opacity: 0;
   }
 }

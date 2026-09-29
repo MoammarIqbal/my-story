@@ -66,7 +66,7 @@ const Story: React.FC = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full max-w-md aspect-square lg:max-w-lg lg:aspect-auto lg:h-[80vh]"
+            className="relative w-full max-w-md aspect-square lg:max-w-lg lg:aspect-auto lg:h-[80vh] floating-image"
           >
             <img 
               src="/ammar-by-maisara.jpeg" 
@@ -105,7 +105,7 @@ const Story: React.FC = () => {
                 className="flex flex-col h-full justify-center max-w-xl mx-auto lg:mx-0 w-full"
               >
                 <div className="flex-1 flex flex-col overflow-y-auto pr-4 py-8">
-                  <div className="my-auto text-base md:text-lg leading-relaxed text-[#252321] tracking-wide">
+                  <div className="my-auto text-base md:text-lg leading-relaxed text-[#252321] tracking-wide font-serif">
                     <Typewriter 
                       key={key}
                       text={STORY_TEXT} 
