@@ -79,17 +79,17 @@ const Story: React.FC = () => {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="flex flex-col items-center justify-center min-h-screen lg:h-screen lg:overflow-hidden text-[#252321] font-sans selection:bg-[#ECE6DA] selection:text-[#252321] py-12 lg:py-0 px-6 relative">
+      <div className="flex flex-col items-center justify-center min-h-screen xl:h-screen xl:overflow-hidden text-[#252321] font-sans selection:bg-[#ECE6DA] selection:text-[#252321] py-12 xl:py-0 px-6 relative">
         
         {/* Responsive Container: 1-col on mobile/tablet, 2-col on desktop */}
-        <div className="w-full max-w-2xl lg:max-w-6xl flex flex-col lg:flex-row items-center lg:items-center justify-center gap-12 lg:gap-16 lg:h-full lg:py-16">
+        <div className="w-full max-w-md md:max-w-2xl xl:max-w-6xl flex flex-col xl:flex-row items-center xl:items-center justify-center gap-10 md:gap-14 xl:gap-16 xl:h-full xl:py-16">
           
           {/* Image Section - Scales to image, sticky on desktop */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:h-full"
+            className="w-full xl:w-1/2 flex justify-center xl:justify-end xl:h-full"
           >
             {/* The floating animation is handled via Framer Motion to avoid CSS transform conflicts */}
             <motion.img 
@@ -97,12 +97,12 @@ const Story: React.FC = () => {
               transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
               src="/ammar-by-maisara.jpeg" 
               alt="Drawing by Maisaraa" 
-              className="w-full h-auto max-h-[55vh] max-w-md lg:max-w-none lg:max-h-full object-contain rounded-sm"
+              className="w-full h-auto max-h-[55vh] md:max-h-[50vh] max-w-full md:max-w-xl xl:max-w-none xl:max-h-full object-contain rounded-sm"
             />
           </motion.div>
 
           {/* Content Section */}
-          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start min-h-[40vh] lg:h-full relative overflow-hidden">
+          <div className="w-full xl:w-1/2 flex flex-col items-center xl:items-start min-h-[40vh] xl:h-full relative overflow-hidden">
             <AnimatePresence mode="wait">
               {!storyStarted ? (
                 <motion.div
@@ -111,7 +111,7 @@ const Story: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.6 }}
-                  className="flex items-center justify-center lg:justify-start mt-8 lg:mt-0 lg:h-full w-full"
+                  className="flex items-center justify-center xl:justify-start mt-8 xl:mt-0 xl:h-full w-full"
                 >
                   <button
                     onClick={handleStart}
@@ -127,14 +127,14 @@ const Story: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="w-full flex flex-col items-center lg:items-start h-full max-h-full"
+                  className="w-full flex flex-col items-center xl:items-start h-full max-h-full"
                 >
                   {/* Story Text Scroll Container */}
                   <div 
                     ref={scrollContainerRef}
                     className="w-full flex-1 overflow-y-auto pr-4 pb-12 flex flex-col"
                   >
-                    <div className="w-full text-base md:text-lg leading-relaxed text-[#252321] tracking-wide font-serif max-w-xl text-center lg:text-left my-auto lg:mt-auto lg:mb-0">
+                    <div className="w-full text-base md:text-lg leading-relaxed text-[#252321] tracking-wide font-serif max-w-full md:max-w-xl text-center xl:text-left mx-auto xl:mx-0 my-auto xl:mt-auto xl:mb-0">
                       <Typewriter 
                         key={key}
                         text={STORY_TEXT} 
@@ -164,7 +164,7 @@ const Story: React.FC = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 1 }}
-                    className="mt-4 pt-6 pb-2 w-full max-w-xs flex items-center justify-center lg:justify-start gap-8 text-[#77716A] border-t border-[#ECE6DA] shrink-0"
+                    className="mt-4 pt-6 pb-2 w-full max-w-xs flex items-center justify-center xl:justify-start gap-8 text-[#77716A] border-t border-[#ECE6DA] shrink-0"
                   >
                     <button
                       onClick={handleRestart}
