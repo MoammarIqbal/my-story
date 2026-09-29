@@ -58,11 +58,26 @@ const Story: React.FC = () => {
   };
 
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   const handleCharTyped = () => {
-    const el = scrollContainerRef.current;
-    if (el) {
-      el.scrollTop = el.scrollHeight;
+    // 1. Desktop Mode (xl): The inner scroll container has a fixed height and its own scrollbar.
+    const scrollEl = scrollContainerRef.current;
+    if (scrollEl && scrollEl.scrollHeight > scrollEl.clientHeight) {
+      scrollEl.scrollTop = scrollEl.scrollHeight;
+      return;
+    }
+    
+    // 2. Mobile/Tablet Mode: The container grows and expands the entire page height.
+    // We scroll the window down to keep the bottom of the story container visible.
+    const wrapperEl = containerRef.current;
+    if (wrapperEl) {
+      const rect = wrapperEl.getBoundingClientRect();
+      // Add a 24px padding margin so the controls don't stick exactly to the screen edge
+      const distanceToScroll = rect.bottom + 24 - window.innerHeight;
+      if (distanceToScroll > 0) {
+        window.scrollBy(0, distanceToScroll);
+      }
     }
   };
 
@@ -124,6 +139,7 @@ const Story: React.FC = () => {
               ) : (
                 <motion.div
                   key="story-content"
+                  ref={containerRef}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
